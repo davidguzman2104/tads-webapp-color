@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selector de Color RGB</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(45deg, #9b4dca, #d17dba, #9c6cbf);
+            background-size: 400% 400%;
+            animation: gradientAnimation 6s ease infinite;
+            color: #ffffff;
+            font-family: 'Arial', sans-serif;
+        }
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .color-box {
+            width: 250px;
+            height: 250px;
+            border-radius: 15px;
+            margin: auto;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+        }
+        .input-group {
+            width: 120px;
+        }
+        .color-label {
+            display: block;
+            font-size: 1.3rem;
+            font-weight: bold;
+            text-align: center;
+        }
+        .form-control {
+            background-color: #333;
+            color: #ffffff;
+            border: 1px solid #d17dba;
+            text-align: center;
+        }
+        .btn-custom {
+            background-color: #d17dba;
+            color: #ffffff;
+            font-weight: bold;
+            border: none;
+            transition: 0.3s;
+            padding: 10px 25px;
+            font-size: 1.1rem;
+        }
+        .btn-custom:hover {
+            background-color: #ba66b0;
+        }
+        h1 {
+            font-size: 2.5rem;
+            color: #ffffff;
+        }
+        .manual-input {
+            margin-top: 30px;
+        }
+        .manual-input input {
+            font-size: 1.1rem;
+        }
+        .icon {
+            font-size: 1.5rem;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+        .input-group span {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #ffffff;
+        }
+        .input-group input {
+            color: #9b4dca;
+        }
+    </style>
+</head>
+<body>
+    <div class="container text-center mt-5">
+        <h1><i class="fas fa-palette icon"></i> Selector de Color RGB</h1>
+        <div id="colorBox" class="color-box shadow"></div>
+        <p id="hexValue" class="fs-4 mt-3">#000000</p>
+        <p id="rgbValue" class="fs-4">rgb(0, 0, 0)</p>
+        
+        <div class="d-flex justify-content-center gap-3 mt-4">
+            <div>
+                <input type="number" id="redInput" class="form-control text-center input-group" min="0" max="255" value="0" onchange="setColor('red', this.value)">
+                <span class="color-label text-danger">R</span>
+            </div>
+            <div>
+                <input type="number" id="greenInput" class="form-control text-center input-group" min="0" max="255" value="0" onchange="setColor('green', this.value)">
+                <span class="color-label text-success">G</span>
+            </div>
+            <div>
+                <input type="number" id="blueInput" class="form-control text-center input-group" min="0" max="255" value="0" onchange="setColor('blue', this.value)">
+                <span class="color-label text-primary">B</span>
+            </div>
+        </div>
+        
+        <div class="manual-input mt-5">
+            <label for="manualRGB" class="fs-5">Ingrese valores RGB (Ej: 255,0,128):</label>
+            <input type="text" id="manualRGB" class="form-control text-center" placeholder="255,0,128">
+            <button class="btn btn-custom mt-3" onclick="setManualColor()">Aplicar Color <i class="fas fa-check-circle"></i></button>
+        </div>
+    </div>
+    
+    <script>
+        let red = 0, green = 0, blue = 0;
+        
+        function updateColor() {
+            let color = `rgb(${red}, ${green}, ${blue})`;
+            let hex = `#${red.toString(16).padStart(2, '0')}${green.toString(16).padStart(2, '0')}${blue.toString(16).padStart(2, '0')}`.toUpperCase();
+            
+            document.getElementById("colorBox").style.backgroundColor = color;
+            document.getElementById("hexValue").textContent = hex;
+            document.getElementById("rgbValue").textContent = color;
+        }
+        
+        function setColor(color, value) {
+            let intValue = Math.min(255, Math.max(0, parseInt(value) || 0));
+            if (color === 'red') red = intValue;
+            if (color === 'green') green = intValue;
+            if (color === 'blue') blue = intValue;
+            
+            updateColor();
+        }
+        
+        function setManualColor() {
+            let input = document.getElementById("manualRGB").value;
+            let values = input.split(",").map(num => parseInt(num.trim()));
+            
+            if (values.length === 3 && values.every(num => !isNaN(num) && num >= 0 && num <= 255)) {
+                [red, green, blue] = values;
+                document.getElementById("redInput").value = red;
+                document.getElementById("greenInput").value = green;
+                document.getElementById("blueInput").value = blue;
+                updateColor();
+            } else {
+                alert("Ingrese valores RGB válidos entre 0 y 255, separados por comas.");
+            }
+        }
+    </script>
+</body>
+</html>
+
